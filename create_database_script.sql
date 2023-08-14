@@ -40,14 +40,53 @@ CREATE TABLE ticket (
 	FOREIGN KEY (mechanic_id) REFERENCES mechanic(mechanic_id)
 );
 
-CREATE PROCEDURE add_customer(
-	@named varchar(50)
-)
-AS
+CREATE PROCEDURE add_customer(named VARCHAR(50))
+LANGUAGE plpgsql
+AS $$
 BEGIN
 	INSERT INTO customer(name_)
-	VALUES(@named)
+	VALUES(named);
 END;
+$$;
 
-EXEC add_customer @named = 'John Johnson';
-EXEC add_customer @named = 'Barb Barbrason';
+CALL add_customer('John Johnson');
+CALL add_customer('Barb Barbrason');
+
+CREATE PROCEDURE add_salesperson(named VARCHAR(50))
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	INSERT INTO salesperson(name_)
+	VALUES(named);
+END;
+$$;
+
+CALL add_salesperson('Dan Danman');
+CALL add_salesperson('Sue Sued');
+
+CREATE PROCEDURE add_mechanic(named VARCHAR(50))
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	INSERT INTO mechanic(name_)
+	VALUES(named);
+END;
+$$;
+
+CALL add_mechanic('Marge Martin');
+CALL add_mechanic('Bob Banker');
+
+INSERT INTO car(name_, description, price)
+VALUES
+('2005 Chevy', 'Blue, new, etc.', 150),
+('2004 Honda', 'Red, broken tailight, etc.', 150);
+
+INSERT INTO invoice(car_id, customer_id, salesperson_id)
+VALUES
+(1,1,1),
+(2,2,1);
+
+INSERT INTO ticket(car_id, customer_id, mechanic_id)
+VALUES
+(1,1,1),
+(2,2,1);
